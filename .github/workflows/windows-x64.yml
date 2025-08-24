@@ -30,8 +30,15 @@ jobs:
 
           cmd /c gclient
           cmd /c python scripts/bootstrap.py
-          cmd /c gclient sync
-          cmd /c gn gen out/Release --args="is_debug=false target_cpu=\"x64\" angle_build_all=false"
+          cmd /c gclient sync --no-history
+          cmd /c gn gen out/Release --args="^
+          is_debug=false ^
+          is_component_build=false ^
+          target_cpu=\"x64\"^
+          angle_build_all=false ^
+          angle_enable_d3d9=false ^
+          angle_enable_wgpu=false ^
+          angle_enable_null=false"
           cmd /c autoninja -C out/Release
 
       - name: Pack
@@ -47,7 +54,6 @@ jobs:
           rm -rf out/Release/build.ninja.d
           rm -rf out/Release/toolchain.ninja
           rm -rf out/Release/environment.*
-          find out/Release -name "*.pdb" -delete
           mv -f out/Release/* angle-windows-x64/dist/
           cp -rf include angle-windows-x64/
           find angle-windows-x64 -name ".clang-format" -delete
