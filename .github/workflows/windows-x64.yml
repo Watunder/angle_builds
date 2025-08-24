@@ -1,12 +1,12 @@
-name: windows-x64
+name: 🏁 windows-x64
 
-on: 
+on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 jobs:
   build-windows-x64:
@@ -15,21 +15,27 @@ jobs:
       - name: Checkout sources
         run: |
           git clone https://github.com/google/angle .
+
       - name: Fetch depot_tools
         run: |
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+
       - name: Build
         shell: cmd
         run: |
+          git config --global depot-tools.allowGlobalGitConfig false
+
           set PATH=%cd%\depot_tools;%PATH%
           set DEPOT_TOOLS_WIN_TOOLCHAIN=0
-          set vs2019_install=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise
-          set WINDOWSSDKDIR=C:\Program Files (x86)\Windows Kits\10
+          set DEPOT_TOOLS_UPDATE=0
+          set DEPOT_TOOLS_METRICS=0
+
           cmd /c gclient
           cmd /c python scripts/bootstrap.py
           cmd /c gclient sync
           cmd /c gn gen out/Release --args="is_debug=false target_cpu=\"x64\" angle_build_all=false"
           cmd /c autoninja -C out/Release
+
       - name: Pack
         shell: bash
         run: |
@@ -48,6 +54,7 @@ jobs:
           cp -rf include angle-windows-x64/
           find angle-windows-x64 -name ".clang-format" -delete
           find angle-windows-x64 -name "*.md" -delete
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
