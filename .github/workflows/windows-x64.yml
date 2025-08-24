@@ -27,8 +27,6 @@ jobs:
 
           set PATH=%cd%\depot_tools;%PATH%
           set DEPOT_TOOLS_WIN_TOOLCHAIN=0
-          set DEPOT_TOOLS_UPDATE=0
-          set DEPOT_TOOLS_METRICS=0
 
           cmd /c gclient
           cmd /c python scripts/bootstrap.py
