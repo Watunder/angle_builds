@@ -31,10 +31,10 @@ jobs:
           cmd /c gclient
           cmd /c python scripts/bootstrap.py
           cmd /c gclient sync --no-history
-          cmd /c gn gen out/Release --args="^
+          cmd /c gn gen out/Release ^
+          --args="target_cpu=\"x64\" ^
           is_debug=false ^
           is_component_build=false ^
-          target_cpu=\"x64\"^
           angle_build_all=false ^
           angle_enable_d3d9=false ^
           angle_enable_wgpu=false ^
